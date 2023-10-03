@@ -1,6 +1,4 @@
 import json
-import datetime
-import time
 from webbrowser import get
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
@@ -10,10 +8,14 @@ from .forms import CreateArt
 from .models import Article, Comment
 from django.contrib import messages
 import markdown2
+from django.core.mail import EmailMessage
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 
 
@@ -193,46 +195,28 @@ def addComment(request, id):
         })
   return HttpResponseRedirect(reverse('blog:singleArt', kwargs={'id':id}))
 
-# @require_POST
+
+@login_required 
+@csrf_exempt
 def like_comment(request, comment_id):
     if request.method == 'POST':
-      print("IIIIIIIIIIIIIIIIIIIIIIIIIIII")
       comment = Comment.objects.get(id=comment_id)
       user = request.user
       if user.is_authenticated:
-          print("RRRRRRRRRRRRRR",comment.likes.all())
           if user in comment.likes.all():
-            print("in Unlike")
             comment.likes.remove(user.id)  # Unlike if already liked
             comment.likes_count -= 1
             comment.save()
-            
-
-            liked = False
-
           else:
-              print("in Like")
-
               comment.likes.add(user.id)  # Like if not already liked
-              liked = True
               comment.likes_count += 1
               comment.save()
-      current_path = request.path
       return JsonResponse({'success': True,'likes': comment.likes_count})
 
       # return HttpResponseRedirect(reverse('blog:singleArt', kwargs={'id':comment.article.id}))
 
-
-
-# app/views.py
-from django.core.mail import EmailMessage
-from django.shortcuts import render
-from .forms import EmailForm
-from django.shortcuts import get_object_or_404
-from django.template.loader import get_template
-
-
-
+@login_required 
+@csrf_exempt
 def send_email(request, postId):
   if request.method == 'POST':
     response_string = request.body.decode('utf-8')

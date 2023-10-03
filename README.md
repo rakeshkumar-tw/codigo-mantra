@@ -23,7 +23,6 @@
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">Run Locally</a> •
   <a href="#views">Urls & Views</a> •
-  <a href="#todo">TODO</a> •
   <a href="#author">Author</a> 
 </p>
 
@@ -33,7 +32,7 @@
 
 # Overview
 
-This is a project which was developed for the CS50 web course final project. The application contained within is a CMS-style blog site where developers can publish their blog articles and comment on other developers' articles in addition to other options.
+This is a project which was developed for the Assignment project. The application contained within is a CMS-style blog site where developers can publish their blog articles and comment on other developers' articles in addition to other options.
 
 
 
@@ -46,7 +45,6 @@ This is a project which was developed for the CS50 web course final project. The
 - accounts:
   - this app is manage users' accounts (login - logout - register - etc.)
   - [Django authentication system](https://docs.djangoproject.com/en/4.1/topics/auth/default/) was used to implement it.
-  - (TODO) modify user profile.
 - blog:
   - this app responsible for creating the articles and handling CRUD operations on them.
 
@@ -58,7 +56,9 @@ This is a project which was developed for the CS50 web course final project. The
 - User Login & Logout.
 - Create, Read, Update & Delete Articles.
 - Save an article with Markdown preview.
+- Share Artical through gmail
 - Comments
+- Like Comments
 - Search for articles on any pages
 - Customized admin panel
 - Categories
@@ -90,7 +90,7 @@ This is a project which was developed for the CS50 web course final project. The
 
 - clone this repository
   ```
-  $ git clone https://github.com/rakeshkumar-tw/Codigo-Manrta.git 
+  $ git clone https://github.com/rakeshkumar-tw/codigo-mantra.git 
   $ cd django-blog
   ```
 - install dependencies
@@ -126,7 +126,6 @@ This is a project which was developed for the CS50 web course final project. The
       - if the user owner this article:
         - number of votes show not vote button.
         - can delete and update.
-    - ![all](screenshots/all_AdobeExpress.gif)
 
     </details>
 
@@ -140,7 +139,6 @@ This is a project which was developed for the CS50 web course final project. The
   - <details>
 
     - user can write article according to the condition
-    - ![add](screenshots/add.gif)
     </details>
 
 - #### `/articles/<str:id>` (Article view)
@@ -152,7 +150,6 @@ This is a project which was developed for the CS50 web course final project. The
 
     - Show all details about this article.
     - user can add comment in this page.
-    - ![view](screenshots/articleview.gif)
     </details>
 
 - #### `/categories`
@@ -164,7 +161,6 @@ This is a project which was developed for the CS50 web course final project. The
 
     - Show all categories.
     - each category has some articles belong it.
-    - ![categories](screenshots/category.gif)
 
     </details>
 
@@ -179,7 +175,6 @@ This is a project which was developed for the CS50 web course final project. The
   - <details>
 
     - Depending on the request user can add a new article or update an existing article
-    - ![update](screenshots/update.gif)
 
     </details>
 
@@ -193,9 +188,4 @@ This is a project which was developed for the CS50 web course final project. The
     - sign up page
   - <details>
 
-    ![accounts](screenshots/accounts.gif)
-
     </details>
-
-<a name = "todo"></a>
-
