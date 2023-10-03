@@ -1,0 +1,167 @@
+{% extends './layout.html' %} 
+{% load static %} 
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}" />
+{% endblock links %}
+
+{% block body %}
+<div class="header">
+  {% if search %}
+    <h1>{{search}}</h1>
+    {% else %}
+    <h1>All you need in Tech</h1>
+  {% endif %}
+  <hr>
+  
+</div>
+<div class="messege container">
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>{{ message }}✔</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+</div>
+<div class="container blog-content">
+  {% for post in articles %}
+  <article class="postcard dark blue" data-card="{{post.id}}">
+    <a class="postcard__img_link" href="{% url 'blog:singleArt' post.id %}">
+      
+      {% if post.artImage %} 
+        <img
+          class="postcard__img"
+          src="{{ post.artImage.url }}"
+          alt="Image Title"
+        />
+      {% else %}
+        <img
+        class="postcard__img"
+        src="../../media/images/default.jpg"
+        alt="Image Title"
+        />
+      {% endif %}
+        
+    </a>
+    <div class="postcard__text">
+      <h1 class="postcard__title blue"><a href="{% url 'blog:singleArt' post.id %}">{{ post.title }}</a></h1>
+      <div class="postcard__subtitle small">
+          <i class="fas fa-calendar-alt mr-2"></i>{{ post.created }}
+      </div>
+      <div class="postcard__bar"></div>
+      <div class="postcard__preview-txt">
+        {{ post.desc }}
+      </div>
+      <ul class="postcard__tagbox">
+        
+        {% for cat in post.category %}
+        <li class="tag__item"><i class="fas fa-tag mr-2"></i>{{cat}}</li>
+        {% endfor %}
+        <!-- <li class="tag__item"><i class="fas fa-clock mr-2"></i>5 mins.</li> -->
+        {% if user.is_authenticated %}
+          {% if user in post.bookmarks.all %}
+          <li class="tag__item play blue save saved" id="{{ post.pk}}">
+            <i class="fa-regular fa-bookmark"></i><span class="save-txt">Saved</span>
+          </li>
+          {% else %}  
+          <li class="tag__item play save blue pointed" id="{{post.id}}"data-bs-toggle="tooltip" data-bs-title="Default tooltip">
+            <i class="fa-regular fa-bookmark"></i><span class="save-txt">Save</span>
+          </li>
+          {% endif %}
+          {% if user != post.owner %}
+            {% if user in post.upvote.all %}
+              <li class="tag__item play blue vote voted" data-vote="{{ post.id }}">
+                <i class="fa-solid fa-angle-up"></i><span class="vote-num">{{ post.upvote.count }}</span>
+              </li>
+            {% else %}
+              <li class="tag__item play blue vote" data-vote="{{ post.id }}">
+                <i class="fa-solid fa-angle-up"></i><span class="vote-num">{{ post.upvote.count }}</span>
+              </li>
+            {% endif %}
+          {% else %}
+            <li class="tag__item play blue">
+              <span>{{ post.upvote.count }} vote</span>
+            </li>
+          {% endif %}
+          
+          {% if user == post.owner %}
+          <li class="tag__item play blue delete pointed" data-delete="{{post.id}}">
+            <i class="fa-regular fa-trash-can"></i>
+          </li>
+          <a href="{% url 'blog:update' post.id %}">
+            <li class="tag__item play blue pointed" data-update="{{post.id}}">
+              <i class="fa-regular fa-pen-to-square"></i> Update
+            </li>
+          </a>
+          
+            <li class="tag__item play blue pointed" data-update="{{post.id}}">
+              <div class="blog-post">
+                <button id="emailButton" class="SendBtn" value="{{post.id}}">Send via Email</button>
+              </div>
+            </li>
+
+            <div id="emailFormModal" class="modal">
+              <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <form id="emailForm">
+                      <label for="email">Email:</label>
+                      <input type="email" id="email" name="email" required>
+                      <input type="hidden" id="postId" value="{{ post.id }}">
+                      <button type="submit">Send</button>
+                  </form>
+              </div>
+            </div>
+
+          {% endif %}
+            
+        {% endif %}
+      </ul>
+    </div>
+  </article>
+  {% empty %}
+  
+  {% if search %}
+    <div class="alert alert-info" role="alert">
+      <strong>OOPS, There are no articles with this title 😥...</strong> 
+    </div>
+  {% else %}  
+    <div class="alert alert-info" role="alert">
+      <strong>There are no Aritcles right now.</strong> 
+    </div>
+  {% endif %}
+    
+  {% endfor %}
+  
+</div>
+<div class="pagination justify-content-end pr-3 mb-3">
+  <span class="step-links">
+      {% if articles.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ articles.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ articles.number }} of {{ articles.paginator.num_pages }}.
+      </span>
+
+      {% if articles.has_next %}
+          <a href="?page={{ articles.next_page_number }}">next</a>
+          <a href="?page={{ articles.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+  </span>
+</div>
+
+<div class="send_form">
+  
+  <form method="post">
+    <button class="close_form">X</button>
+    {% csrf_token %}
+    <label for="subject">Subject:</label>
+    <input type="text" name="subject" required><br><br>
+    
+    <label for="recipient_email">Recipient's Email:</label>
+    <input type="email" name="recipient_email" required><br><br>
+    <input class="submit_form" type="submit" value="Send Email">
+</form>
+</div> 
+
+{% endblock body %}

@@ -1,0 +1,17 @@
+asgiref==3.7.2
+attrs==20.3.0
+Django==4.0.6
+django-crispy-forms==1.14.0
+django-filter==22.1
+django-multiselectfield==0.1.12
+djangorestframework==3.13.1
+importlib-metadata==6.8.0
+Markdown==3.4.1
+markdown2==2.4.3
+Pillow==9.2.0
+python-dotenv==1.0.0
+pytz==2023.3.post1
+sqlparse==0.4.4
+typing-extensions==4.8.0
+tzdata==2023.3
+zipp==3.17.0
